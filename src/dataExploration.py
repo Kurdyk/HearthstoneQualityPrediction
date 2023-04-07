@@ -8,8 +8,11 @@ class DataVisualizer:
     def filter_col(self, unwanted_col):
         self.df = self.df.drop(columns=unwanted_col)
 
-    def filter_row(self, mask):
-        self.df = self.df.loc[mask]
+    def filter_isin(self, varible, wanted_set):
+        self.df = self.df[self.df[varible].isin(wanted_set)]
+
+    def print(self):
+        print(self.df)
 
 
 if __name__ == "__main__":
@@ -18,6 +21,7 @@ if __name__ == "__main__":
     print(df.keys())
     unwanted_col = ["cardId", "dbfId", "locale", "elite", "img", "flavor", "artist", "imgGold", "howToGetGold",
                     "howToGet", "howToGetDiamond", "faction"]
-    mask = df["Category"] in ["Basic", "Classic"]
-    dv.filter_row(mask)
+    dv.filter_col(unwanted_col)
+    dv.filter_isin("Category", {"Basic", "Classic"})
+    dv.print()
     # print(df["Category"].unique())
