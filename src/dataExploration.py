@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 class DataVisualizer:
@@ -20,8 +21,12 @@ if __name__ == "__main__":
     dv = DataVisualizer(df)
     print(df.keys())
     unwanted_col = ["cardId", "dbfId", "locale", "elite", "img", "flavor", "artist", "imgGold", "howToGetGold",
-                    "howToGet", "howToGetDiamond", "faction"]
+                    "howToGet", "howToGetDiamond", "faction", "classes"]
     dv.filter_col(unwanted_col)
-    dv.filter_isin("Category", {"Basic", "Classic"})
+    dv.filter_isin("Category", set(df["Category"].unique()) - {"Missions", "Credits", "Hero Skins", "Tavern Brawl",
+                                                               "Battlegrounds", "Mercenaries"})
+    dv.filter_isin("type", set(df["type"].unique()) - {"Hero Power", "Enchantment", np.nan, "Hero"})
+    dv.filter_isin("collectible", set(df["collectible"].unique()) - {np.nan})
+    dv.filter_col(["collectible"])
     dv.print()
-    # print(df["Category"].unique())
+    dv.df.to_csv("../filterData.csv")
