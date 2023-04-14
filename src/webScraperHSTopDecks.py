@@ -4,7 +4,8 @@ import numpy as np
 from bs4 import BeautifulSoup
 
 base_url = "https://www.hearthstonetopdecks.com/cards/page/"
-keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "rarity", "card_mark"]
+keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "rarity", "card_mark",
+		"minion_type", "spell_school"]
 
 
 def parse_card_page(url, card_name):
@@ -21,13 +22,24 @@ def parse_card_page(url, card_name):
 		li = str(li)
 		li = li.strip("<li>").strip("</li>").strip("</a")
 		if li.count("Mana Cost:") > 0:
-			card_dict["mana"] = int(li[-1])
+			card_dict["mana"] = int(li[-2:])
 		elif li.count("Attack:") > 0:
-			card_dict["attack"] = int(li[-1])
+			card_dict["attack"] = int(li[-2:])
 		elif li.count("Health:") > 0:
-			card_dict["health"] = int(li[-1])
+			card_dict["health"] = int(li[-2:])
 		elif li.count("Durability:") > 0:
 			card_dict["durability"] = int(li[-1])
+		elif li.count("Minion Type") > 0:
+			types = list()
+			for minion_type in {"All", "Beast", "Demon", "Dragon", "Elemental", "Mech",
+								"Murloc", "Naga", "Pirate", "Quilboar", "Totem", "Undead"}:
+				if li.count(minion_type) > 0:
+					types.append(minion_type)
+				card_dict["minion_type"] = types
+		elif li.count("School"):
+			for spell_school in {"Arcane", "Fel", "Fire", "Holy", "Nature", "Shadow"}:
+				if li.count(spell_school):
+					card_dict["spell_school"] = spell_school
 		elif li.count("Rarity"):
 			for rarity in {"Common", "Rare", "Epic", "Legendary"}:
 				if li.count(rarity) > 0:
@@ -52,6 +64,7 @@ def parse_card_page(url, card_name):
 	card_dict["card_mark"] = float(mark)
 	card_df = pd.DataFrame(columns=keys)
 	card_df = card_df.append(card_dict, ignore_index=True)
+	print(card_dict)
 	return card_df
 
 
