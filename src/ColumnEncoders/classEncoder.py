@@ -57,5 +57,5 @@ class ClassEncoder:
 if __name__ == "__main__":
 	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = ClassEncoder(df)
-	ce.encode_class_col().to_csv("/test/test_class.csv")
+	ce.encode_class_col().to_csv("test_class.csv")
 
