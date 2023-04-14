@@ -64,7 +64,6 @@ def parse_card_page(url, card_name):
 	card_dict["card_mark"] = float(mark)
 	card_df = pd.DataFrame(columns=keys)
 	card_df = card_df.append(card_dict, ignore_index=True)
-	print(card_dict)
 	return card_df
 
 
