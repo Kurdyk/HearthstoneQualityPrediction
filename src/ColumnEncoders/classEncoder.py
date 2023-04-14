@@ -50,13 +50,14 @@ class ClassEncoder:
 
 		print(class_encoding_df)
 		tmp = self.dataframe.join(class_encoding_df, on="name")
-		print(tmp)
 		tmp = tmp.drop(columns="class")
+		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
+		print(tmp)
 		return tmp
 
 
 if __name__ == "__main__":
 	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = ClassEncoder(df)
-	ce.encode_class_col().to_csv("test.csv", index=False)
+	ce.encode_class_col().to_csv("test.csv")
 
