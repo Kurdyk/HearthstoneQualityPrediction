@@ -48,16 +48,14 @@ class ClassEncoder:
 			tmp = pd.DataFrame(encoding, columns=["name", "Class_hex0", "Class_hex1", "Class_hex2"]).set_index("name")
 			class_encoding_df = class_encoding_df.append(tmp)
 
-		print(class_encoding_df)
 		tmp = self.dataframe.join(class_encoding_df, on="name")
 		tmp = tmp.drop(columns="class")
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
-		print(tmp)
 		return tmp
 
 
 if __name__ == "__main__":
 	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = ClassEncoder(df)
-	ce.encode_class_col().to_csv("test.csv")
+	ce.encode_class_col().to_csv("/test/test_class.csv")
 
