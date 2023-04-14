@@ -16,7 +16,7 @@ def parse_card_page(url, card_name):
 	card_dict = {key: np.nan for key in keys}
 	card_dict["name"] = card_name
 	card_text = card_info.findNext("div", {"class": "card-content"}).findNext('p').findNext('p')
-	card_dict["card_text"] = str(card_text).strip("<p>").strip("</p>")
+	card_dict["card_text"] = card_text.get_text()
 	list_detail = card_info.findNext("ul")
 	for li in list_detail.find_all("li"):
 		li = str(li)
@@ -63,7 +63,7 @@ def parse_card_page(url, card_name):
 	mark = rating_text[rating_index_start + len("<strong>"):rating_index_end]
 	card_dict["card_mark"] = float(mark)
 	card_df = pd.DataFrame(columns=keys)
-	card_df = card_df.append(card_dict, ignore_index=True)
+	card_df = card_df._append(card_dict, ignore_index=True)
 	print(card_dict)
 	return card_df
 
@@ -80,7 +80,7 @@ def main():
 			card_name = card.find("a").get("href").rsplit('/')[-2]
 			card_url = "https://www.hearthstonetopdecks.com/cards/" + card_name + "/"
 			card_df = parse_card_page(card_url, card_name)
-			total_df = total_df.append(card_df)
+			total_df = total_df._append(card_df)
 
 	print(total_df)
 	total_df.to_csv("../HSTopdeck.csv")

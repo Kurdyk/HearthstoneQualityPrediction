@@ -5,7 +5,8 @@ class DataEncoder:
 	def __init__(self,df: pd.DataFrame):
 		self.df = df
 
-	def encode_card_text(self,corpus):
+
+	def encode(self,corpus):
 		"""
 		Use TF-IDF to vectorize a corpus (string array). Return the dataframe obtained.
 		Warning : Non-alphanumeric characters at the beginning of a word (except space) are taken into account in the tokenization. Otherwise we 
@@ -31,13 +32,17 @@ class DataEncoder:
 if __name__ == "__main__":
 	df = pd.read_csv("../OldData/hearthstone.csv")
 	de = DataEncoder(df)
-	resulting_df = de.encode_card_text(["Discover a minion. Give it +1/+1.",
+
+	test_corpus = ["Discover a minion. Give it +1/+1.",
 		"Enrage: +2 Attack.",
 		"Deathrattle: Summon a random friendly Beast that died this game.",
 		"At the end of your turn, eat a random enemy minion and gain its stats.",
 		"Taunt. Deathrattle: Deal 2 damage to ALL characters.",
 		"Discover a 6-Cost minion. Summon it with Taunt and Divine Shield.",
-		"Spell Damage +2 Deathrattle:The next minion you draw inherits these powers."])
+		"Spell Damage +2 Deathrattle:The next minion you draw inherits these powers."]
+	resulting_df = de.encode(test_corpus)
 
 	print(resulting_df)
+
+	
 
