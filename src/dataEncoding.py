@@ -1,8 +1,9 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+
 class DataEncoder:
-	def __init__(self,df: pd.DataFrame):
+	def __init__(self, df: pd.DataFrame):
 		self.df = df
 
 	def encode_card_text(self,corpus):
