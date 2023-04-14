@@ -39,32 +39,10 @@ class DataEncoder:
 
 			tf_array.append(tf)
 
-	def encode_class_col(self, c):
-
-		class_dict = {"Druid": 0b1, "Hunter": 0b10, "Paladin": 0b100, "Mage": 0b1000, "Warrior": 0b10000,
-					  "Shaman": 0b10000, "Priest": 0b100000, "Demon Hunter": 0b1000000, "Neutral": 0b1000000,
-					  "Rogue": 0b10000000, "Warlock": 0b100000000, "Death Knight": 0b1000000000}
-
-		def encode_class(class_list: list):
-			bit_list_hexa = list()
-			binary = 0b0
-			for card_class in class_list:
-				binary += class_dict[card_class]
-			hexa = hex(binary)
-			for i in range(3):
-				try:
-					bit_list_hexa.append(int(hexa[2 + i]))
-				except IndexError:
-					bit_list_hexa.append(0)
-			return bit_list_hexa
-
-		print(encode_class(c))
-
-
 
 
 if __name__ == "__main__":
 	df = pd.read_csv("../OldData/hearthstone.csv")
 	de = DataEncoder(df)
-	de.encode_class_col(["Druid", "Paladin"])
+	de.encode_class_col(["Rogue", "Demon Hunter"])
 
