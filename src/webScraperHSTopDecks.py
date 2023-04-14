@@ -16,7 +16,7 @@ def parse_card_page(url, card_name):
 	card_dict = {key: np.nan for key in keys}
 	card_dict["name"] = card_name
 	card_text = card_info.findNext("div", {"class": "card-content"}).findNext('p').findNext('p')
-	card_dict["card_text"] = str(card_text).strip("<p>").strip("</p>")
+	card_dict["card_text"] = card_text.get_text()
 	list_detail = card_info.findNext("ul")
 	for li in list_detail.find_all("li"):
 		li = str(li)
