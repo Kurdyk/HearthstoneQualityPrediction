@@ -76,10 +76,10 @@ def fuse(name_list: list, data_list: list):
 
 
 if __name__ == "__main__":
-    reformated_order = reformat("../WebCardsOrder")
-    reformated_data = reformat("../WebScraping")
+    reformated_order = reformat("../OldData/WebCardsOrder")
+    reformated_data = reformat("../OldData/WebScraping")
     fused_dataframe = fuse(scrap_order(reformated_order), scrap_data(reformated_data))
-    first_dataframe = pd.read_csv("../filterData.csv")
+    first_dataframe = pd.read_csv("../OldData/filterData.csv")
     joined = first_dataframe.set_index("name").join(fused_dataframe.set_index("name"), on="name")
     print(joined)
     print(joined.keys())

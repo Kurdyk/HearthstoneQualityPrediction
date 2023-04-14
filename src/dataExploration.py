@@ -15,13 +15,12 @@ class DataVisualizer:
         print(self.df[columns])
 
     def print(self):
-        print(self.df[columns])
+        print(self.df)
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("../hearthstone.csv")
+    df = pd.read_csv("../OldData/hearthstone.csv")
     dv = DataVisualizer(df)
     unwanted_col = ["cardId", "dbfId", "locale", "elite", "img", "flavor", "artist", "imgGold", "howToGetGold",
                     "howToGet", "howToGetDiamond", "faction"]
     dv.filter_col(unwanted_col)
- 

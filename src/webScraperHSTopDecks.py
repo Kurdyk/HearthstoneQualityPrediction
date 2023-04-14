@@ -4,7 +4,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 
 base_url = "https://www.hearthstonetopdecks.com/cards/page/"
-keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "card_mark"]
+keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "rarity", "card_mark"]
 
 
 def parse_card_page(url, card_name):
@@ -28,6 +28,10 @@ def parse_card_page(url, card_name):
 			card_dict["health"] = int(li[-1])
 		elif li.count("Durability:") > 0:
 			card_dict["durability"] = int(li[-1])
+		elif li.count("Rarity"):
+			for rarity in {"Common", "Rare", "Epic", "Legendary"}:
+				if li.count(rarity) > 0:
+					card_dict["rarity"] = rarity
 		elif li.count("Class") > 0:
 			classes = list()
 			for hero_class in {"Druid", "Hunter", "Paladin", "Mage", "Warrior", "Shaman",
@@ -55,6 +59,7 @@ def main():
 	total_df = pd.DataFrame(columns=keys)
 
 	for i in range(1, 86):
+		print(i)
 		response = requests.get(base_url + str(i))
 		soup = BeautifulSoup(response.text, "html.parser")
 		cards = soup.findAll("div", class_="col-md-6 col-sm-12 col-xs-24")
@@ -63,7 +68,6 @@ def main():
 			card_url = "https://www.hearthstonetopdecks.com/cards/" + card_name + "/"
 			card_df = parse_card_page(card_url, card_name)
 			total_df = total_df.append(card_df)
-			print(total_df)
 
 	print(total_df)
 	total_df.to_csv("../HSTopdeck.csv")
