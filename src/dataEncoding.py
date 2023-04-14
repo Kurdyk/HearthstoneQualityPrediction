@@ -9,7 +9,7 @@ class DataEncoder:
 		"""
 		Use TF-IDF to encode the text and modifie the dataframe accordingly
 		"""
-		documents = self.df[column]
+		documents = self.df
 
 		# Compute TF and IDF
 		tf_array = list() # array of dict, each dict represent a document and contain the tf of each words in the document
@@ -43,6 +43,6 @@ class DataEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../hearthstone.csv")
+	df = pd.read_csv("../OldData/hearthstone.csv")
 	de = DataEncoder(df)
 	de.tokenization("name")
