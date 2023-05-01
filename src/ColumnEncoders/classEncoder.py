@@ -55,9 +55,32 @@ class ClassEncoder:
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
 		return tmp
 
+	def encode_class_col_one_hot(self):
+
+		def parse_list(list_as_str: str):
+			return [hero_class for hero_class in class_dict if list_as_str.count(hero_class) > 0]
+
+		new_col = [f"is_{class_name}" for class_name in class_dict]
+		all_col = ["name"] + new_col
+		class_encoding_df = pd.DataFrame(columns=all_col).set_index("name")
+
+		for index, row in self.dataframe[["name", "class"]].iterrows():
+			name, classes = row["name"], row["class"]
+			class_list = parse_list(classes)
+			encoding = {f"is_{class_name}": 1 if class_name in class_list else 0 for class_name in class_dict}
+			encoding["name"] = name
+			encoding = {k: [v] for k, v in encoding.items()}
+			tmp = pd.DataFrame(encoding, columns=all_col).set_index("name")
+			class_encoding_df = class_encoding_df.append(tmp)
+
+		tmp = self.dataframe.join(class_encoding_df, on="name")
+		tmp = tmp.drop(columns="class")
+		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
+		return tmp
+
 
 if __name__ == "__main__":
 	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = ClassEncoder(df)
-	ce.encode_class_col().to_csv("test_class.csv")
+	ce.encode_class_col_one_hot().to_csv("test_class.csv")
 
