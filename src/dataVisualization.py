@@ -4,6 +4,9 @@ from sklearn.decomposition import PCA
 from dataEncoding import *
 
 def plot_data(df,n_dim):
+	"""
+	Warning : df must not contain the labels.
+	"""
 	pca = PCA(n_components=n_dim)
 	X_pca = pca.fit_transform(df)
 
