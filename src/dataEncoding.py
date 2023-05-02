@@ -7,8 +7,9 @@ To do:
 - On peut test de faire de la cross validation pour déterminer le bon n_dim
 """
 
+
 class DataEncoder:
-	def __init__(self,df: pd.DataFrame):
+	def __init__(self, df: pd.DataFrame):
 		self.df = df
 
 	def encode(self,corpus,n_dim):

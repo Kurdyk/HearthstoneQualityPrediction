@@ -19,8 +19,7 @@ def parse_card_page(url, card_name):
 	card_dict["card_text"] = card_text.get_text()
 	list_detail = card_info.findNext("ul")
 	for li in list_detail.find_all("li"):
-		li = str(li)
-		li = li.strip("<li>").strip("</li>").strip("</a")
+		li = li.get_text()
 		if li.count("Mana Cost:") > 0:
 			card_dict["mana"] = int(li[-2:])
 		elif li.count("Attack:") > 0:
@@ -31,11 +30,11 @@ def parse_card_page(url, card_name):
 			card_dict["durability"] = int(li[-1])
 		elif li.count("Minion Type") > 0:
 			types = list()
-			for minion_type in {"All", "Beast", "Demon", "Dragon", "Elemental", "Mech",
+			for minion_type in {"Amalgam", "Beast", "Demon", "Dragon", "Elemental", "Mech",
 								"Murloc", "Naga", "Pirate", "Quilboar", "Totem", "Undead"}:
 				if li.count(minion_type) > 0:
 					types.append(minion_type)
-				card_dict["minion_type"] = types
+			card_dict["minion_type"] = types
 		elif li.count("School"):
 			for spell_school in {"Arcane", "Fel", "Fire", "Holy", "Nature", "Shadow"}:
 				if li.count(spell_school):
@@ -63,8 +62,7 @@ def parse_card_page(url, card_name):
 	mark = rating_text[rating_index_start + len("<strong>"):rating_index_end]
 	card_dict["card_mark"] = float(mark)
 	card_df = pd.DataFrame(columns=keys)
-	card_df = card_df._append(card_dict, ignore_index=True)
-	print(card_dict)
+	card_df = card_df.append(card_dict, ignore_index=True)
 	return card_df
 
 

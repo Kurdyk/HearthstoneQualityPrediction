@@ -19,7 +19,7 @@ class DataVisualizer:
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("../OldData/hearthstone.csv")
+    df = pd.read_csv("hearthstone.csv")
     dv = DataVisualizer(df)
     unwanted_col = ["cardId", "dbfId", "locale", "elite", "img", "flavor", "artist", "imgGold", "howToGetGold",
                     "howToGet", "howToGetDiamond", "faction"]
