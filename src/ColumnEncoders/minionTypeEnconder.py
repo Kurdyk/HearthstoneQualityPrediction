@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 type_dict = {"Amalgam": 0b1,
 			 "Beast": 0b10,
@@ -16,10 +17,7 @@ type_dict = {"Amalgam": 0b1,
 
 class MinionTypeEncoder:
 
-	def __init__(self, dataframe: pd.DataFrame):
-		self.dataframe = dataframe
-
-	def encode_type_col(self):
+	def encode_type_col(self, dataframe: pd.DataFrame):
 
 		def parse_list(list_as_str: str):
 			return [minion_type for minion_type in type_dict if list_as_str.count(minion_type) > 0]
@@ -41,9 +39,9 @@ class MinionTypeEncoder:
 			return bit_dict_hexa
 
 		type_encoding_df = pd.DataFrame(columns=["name", "Type_hex0", "Type_hex1", "Type_hex2"]).set_index("name")
-		for index, row in self.dataframe[["name", "minion_type"]].iterrows():
-			name, types = row["name"], row["minion_type"]
-			if self.dataframe.isnull().iloc[index]["minion_type"]:
+		for index, row in dataframe["minion_type"].items():
+			name, types = index, row
+			if dataframe.isnull().iloc[index]["minion_type"]:
 				encoding = {"Type_hex0": 0, "Type_hex1": 0, "Type_hex2": 0}
 			else:
 				type_list = parse_list(types)
@@ -53,12 +51,12 @@ class MinionTypeEncoder:
 			tmp = pd.DataFrame(encoding, columns=["name", "Type_hex0", "Type_hex1", "Type_hex2"]).set_index("name")
 			type_encoding_df = type_encoding_df.append(tmp)
 
-		tmp = self.dataframe.join(type_encoding_df, on="name")
+		tmp = dataframe.join(type_encoding_df, on="name")
 		tmp = tmp.drop(columns="minion_type")
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
 		return tmp
 
-	def encode_type_col_one_hot(self):
+	def encode_type_col_one_hot(self, dataframe: pd.DataFrame):
 
 		def parse_list(list_as_str: str):
 			return [minion_type for minion_type in type_dict if list_as_str.count(minion_type) > 0]
@@ -67,19 +65,18 @@ class MinionTypeEncoder:
 		all_col = ["name"] + new_col
 		type_encoding_df = pd.DataFrame(columns=all_col).set_index("name")
 
-		for index, row in self.dataframe[["name", "minion_type"]].iterrows():
-			name, types = row["name"], row["minion_type"]
-			if self.dataframe.isnull().iloc[index]["minion_type"]:
+		for index, row in dataframe["minion_type"].items():
+			name, types = index, row
+			if type(types) == float:
 				encoding = {f"is_{minion_type}": 0 for minion_type in type_dict}
 			else:
-				type_list = parse_list(types)
-				encoding = {f"is_{minion_type}": 1 if minion_type in type_list else 0 for minion_type in type_dict}
+				encoding = {f"is_{minion_type}": 1 if minion_type in types else 0 for minion_type in type_dict}
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=all_col).set_index("name")
 			type_encoding_df = type_encoding_df.append(tmp)
 
-		tmp = self.dataframe.join(type_encoding_df, on="name")
+		tmp = dataframe.join(type_encoding_df, on="name")
 		tmp = tmp.drop(columns="minion_type")
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
 		return tmp
@@ -87,5 +84,5 @@ class MinionTypeEncoder:
 
 if __name__ == "__main__":
 	df = pd.read_csv("test_class.csv")
-	ce = MinionTypeEncoder(df)
-	ce.encode_type_col_one_hot().to_csv("test_type.csv")
+	ce = MinionTypeEncoder()
+	ce.encode_type_col_one_hot(df).to_csv("test_type.csv")

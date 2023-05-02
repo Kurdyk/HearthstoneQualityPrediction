@@ -8,11 +8,9 @@ To do:
 """
 
 
-class DataEncoder:
-	def __init__(self, df: pd.DataFrame):
-		self.df = df
+class TextEncoder:
 
-	def encode(self,corpus,n_dim):
+	def encode(self, corpus, n_dim: int):
 		"""
 		Use TF-IDF to vectorize a corpus (string array). Then it used LSA on the TF-IDF matrix to reduce the dimensionality to n_dim.
 		Warning : Non-alphanumeric characters at the beginning of a word (except space) are taken into account in the tokenization. Otherwise we 
@@ -32,8 +30,8 @@ class DataEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../OldData/hearthstone.csv")
-	de = DataEncoder(df)
+	df = pd.read_csv("../../OldData/hearthstone.csv")
+	de = TextEncoder()
 
 	test_corpus = ["Discover a minion. Give it +1/+1.",
 		"Enrage: +2 Attack.",
@@ -42,7 +40,7 @@ if __name__ == "__main__":
 		"Taunt. Deathrattle: Deal 2 damage to ALL characters.",
 		"Discover a 6-Cost minion. Summon it with Taunt and Divine Shield.",
 		"Spell Damage +2 Deathrattle:The next minion you draw inherits these powers."]
-	resulting_df = de.encode(test_corpus,3)
+	resulting_df = de.encode(test_corpus, 3)
 
 	print(resulting_df)
 

@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from dataEncoding import *
+from src.ColumnEncoders.textEncoder import *
 
 def viz_3D(data):
 	fig = plt.figure()
@@ -21,7 +20,7 @@ def viz_3D(data):
 
 if __name__ == "__main__":
 	df = pd.read_csv("../OldData/hearthstone.csv")
-	de = DataEncoder(df)
+	de = TextEncoder(df)
 
 	test_corpus = ["Discover a minion. Give it +1/+1.",
 		"Enrage: +2 Attack.",
