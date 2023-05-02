@@ -16,9 +16,6 @@ class_dict = {"Druid": 0b1,
 
 class ClassEncoder:
 
-	def __init__(self, dataframe: pd.DataFrame):
-		self.dataframe = dataframe
-
 	def encode_class(self, class_list: list):
 		bit_dict_hexa = {"Class_hex0": 0, "Class_hex1": 0, "Class_hex2": 0}
 		binary = 0b0
@@ -35,14 +32,14 @@ class ClassEncoder:
 				pass
 		return bit_dict_hexa
 
-	def encode_class_col(self):
+	def encode_class_col(self, dataframe: pd.DataFrame):
 
 		def parse_list(list_as_str: str):
 			return [hero_class for hero_class in class_dict if list_as_str.count(hero_class) > 0]
 
 		class_encoding_df = pd.DataFrame(columns=["name", "Class_hex0", "Class_hex1", "Class_hex2"]).set_index("name")
-		for index, row in self.dataframe[["name", "class"]].iterrows():
-			name, classes = row["name"], row["class"]
+		for index, row in dataframe["class"].items():
+			name, classes = index, row
 			class_list = parse_list(classes)
 			encoding = self.encode_class(class_list)
 			encoding["name"] = name
@@ -50,12 +47,12 @@ class ClassEncoder:
 			tmp = pd.DataFrame(encoding, columns=["name", "Class_hex0", "Class_hex1", "Class_hex2"]).set_index("name")
 			class_encoding_df = class_encoding_df.append(tmp)
 
-		tmp = self.dataframe.join(class_encoding_df, on="name")
+		tmp = dataframe.join(class_encoding_df, on="name")
 		tmp = tmp.drop(columns="class")
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
 		return tmp
 
-	def encode_class_col_one_hot(self):
+	def encode_class_col_one_hot(self, dataframe: pd.DataFrame):
 
 		def parse_list(list_as_str: str):
 			return [hero_class for hero_class in class_dict if list_as_str.count(hero_class) > 0]
@@ -64,8 +61,8 @@ class ClassEncoder:
 		all_col = ["name"] + new_col
 		class_encoding_df = pd.DataFrame(columns=all_col).set_index("name")
 
-		for index, row in self.dataframe[["name", "class"]].iterrows():
-			name, classes = row["name"], row["class"]
+		for index, row in dataframe["class"].items():
+			name, classes = index, row
 			class_list = parse_list(classes)
 			encoding = {f"is_{class_name}": 1 if class_name in class_list else 0 for class_name in class_dict}
 			encoding["name"] = name
@@ -73,7 +70,7 @@ class ClassEncoder:
 			tmp = pd.DataFrame(encoding, columns=all_col).set_index("name")
 			class_encoding_df = class_encoding_df.append(tmp)
 
-		tmp = self.dataframe.join(class_encoding_df, on="name")
+		tmp = dataframe.join(class_encoding_df, on="name")
 		tmp = tmp.drop(columns="class")
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
 		return tmp
@@ -81,6 +78,6 @@ class ClassEncoder:
 
 if __name__ == "__main__":
 	df = pd.read_csv("../../HSTopdeck.csv")
-	ce = ClassEncoder(df)
-	ce.encode_class_col_one_hot().to_csv("test_class.csv")
+	ce = ClassEncoder()
+	ce.encode_class_col_one_hot(df).to_csv("test_class.csv")
 
