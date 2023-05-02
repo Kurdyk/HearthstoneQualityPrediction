@@ -78,10 +78,10 @@ def main():
 			card_name = card.find("a").get("href").rsplit('/')[-2]
 			card_url = "https://www.hearthstonetopdecks.com/cards/" + card_name + "/"
 			card_df = parse_card_page(card_url, card_name)
-			total_df = total_df.append(card_df)
+			total_df = total_df._append(card_df)
 
 	print(total_df)
-	total_df.to_csv("../HSTopdeck.csv")
+	total_df.to_csv("../HSTopdeck.csv",index=False)
 
 
 if __name__ == "__main__":
