@@ -1,18 +1,22 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn.decomposition import PCA
 from dataEncoding import *
 
-def plot_data(data,n_dim):
-    if n == 1:
-        plt.plot(data)
+def plot_data(df,n_dim):
+	pca = PCA(n_components=n_dim)
+	X_pca = pca.fit_transform(df)
+
+    if n_dim == 1:
+        plt.plot(X_pca)
         plt.show()
-    elif n == 2:
-        plt.scatter(data[:,0], data[:,1])
+    elif n_dim == 2:
+        plt.scatter(X_pca[:,0], X_pca[:,1])
         plt.show()
-    elif n == 3:
+    elif n_dim == 3:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        ax.scatter(data[:,0], data[:,1], data[:,2])
+        ax.scatter(X_pca[:,0], X_pca[:,1], X_pca[:,2])
         plt.show()
     else:
         print("Dimension not supported for plotting")
