@@ -7,9 +7,11 @@ import pandas as pd
 
 
 class DataEncoder:
-	def __init__(self, class_encoder: ClassEncoder, minion_type_encoder: MinionTypeEncoder,
-				 rarity_encoder: RarityEncoder, spell_school_encoder: SpellSchoolsEncoder,
-				 text_encoder: TextEncoder):
+	def __init__(self, class_encoder: ClassEncoder = ClassEncoder(),
+				 minion_type_encoder: MinionTypeEncoder = MinionTypeEncoder(),
+				 rarity_encoder: RarityEncoder = RarityEncoder(),
+				 spell_school_encoder: SpellSchoolsEncoder = SpellSchoolsEncoder(),
+				 text_encoder: TextEncoder = TextEncoder()):
 		self.class_encoder = class_encoder
 		self.minion_type_encoder = minion_type_encoder
 		self.rarity_encoder = rarity_encoder
@@ -17,7 +19,6 @@ class DataEncoder:
 		self.text_encoder = text_encoder
 
 	def encode(self, df: pd.DataFrame, n_dim_text: int = 20):
-
 		class_encoded = self.class_encoder.encode_class_col_one_hot(df)
 		type_encoded = self.minion_type_encoder.encode_type_col_one_hot(class_encoded)
 		rarity_encoded = self.rarity_encoder.encode_rarity_col(type_encoded)

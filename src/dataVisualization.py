@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.decomposition import PCA
-from dataEncoding import *
+from dataEncoder import *
+import pandas as pd
 
-def plot_data(df,n_dim):
+def plot_data(df, n_dim):
 	"""
 	Warning : df must not contain the labels.
 	"""
@@ -24,10 +25,11 @@ def plot_data(df,n_dim):
 	else:
 		print("Dimension not supported for plotting")
 
-if __name__ == "__main__":
-	df = pd.read_csv("../hearthstone.csv")
-	de = DataEncoder(df)
-	resulting_df = de.encode()
 
-	n_dim = 2
-	plot_data(resulting_df,n_dim)
+if __name__ == "__main__":
+	df = pd.read_csv("../HSTopdeck.csv").drop(columns=["card_type", "card_mark"]).set_index("name")
+	de = DataEncoder()
+	resulting_df = de.encode(df, 100).fillna(0)
+	resulting_df.to_csv("test.csv")
+	n_dim = 3
+	plot_data(resulting_df, n_dim)

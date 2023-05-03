@@ -1,4 +1,7 @@
+from sklearn.decomposition import PCA
 from sklearn.linear_model import Lasso
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import normalize
@@ -13,7 +16,7 @@ class L1Regression:
 		self.y_train = y_train
 		self.x_test = x_test
 		self.y_test = y_test
-		self.model = Lasso(alpha=alpha)
+		self.model = LinearRegression()
 
 	def fit(self):
 		self.model.fit(self.x_train, self.y_train)
@@ -27,20 +30,25 @@ class L1Regression:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../../HSTopdeck.csv", index_col=0).drop(columns="card_type")
+	df = pd.read_csv("../../HSTopdeck.csv", index_col=0)
+	df = df[df["card_type"] == "Minion"].drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
-	x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True, random_state=42)
-	data_encoder = DataEncoder(ClassEncoder(), MinionTypeEncoder(), RarityEncoder(),
-							   SpellSchoolsEncoder(), TextEncoder())
+	x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True, random_state=52)
+	data_encoder = DataEncoder()
 
-	x_train_encoded = data_encoder.encode(x_train).fillna(0)
-	x_test_encoded = data_encoder.encode(x_test).fillna(0)
+	x_train_encoded = data_encoder.encode(x_train, 40).fillna(0).drop(columns=["is_Shadow", "is_Nature", "is_Fire", "is_Arcane", "is_Frost", "is_Fel", "is_Holy"])
+	x_test_encoded = data_encoder.encode(x_test, 40).fillna(0).drop(columns=["is_Shadow", "is_Nature", "is_Fire", "is_Arcane", "is_Frost", "is_Fel", "is_Holy"])
 
 	x_train_normalized = normalize(x_train_encoded)
 	x_test_normalized = normalize(x_test_encoded)
 
+	# pca = PCA(n_components=10)
+	# x_train_normalized = pca.fit_transform(x_train_normalized)
+	# x_test_normalized = pca.fit_transform(x_test_normalized)
+
 	l1_regressor = L1Regression(x_train_normalized, y_train, x_test_normalized, y_test, 0.1)
 	l1_regressor.fit()
+	print(l1_regressor.model.coef_)
 	print(l1_regressor.evaluate())
 	prediction = l1_regressor.pred(x_test_normalized)
 	print(prediction)
