@@ -10,7 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-class L1Regression:
+class LinRegression:
 
 	def __init__(self, x_train, y_train, x_test, y_test, alpha=0.1):
 		self.x_train = x_train
@@ -45,12 +45,14 @@ if __name__ == "__main__":
 		x_train_normalized = normalize(x_train_encoded)
 		x_test_normalized = normalize(x_test_encoded)
 
-		l1_regressor = L1Regression(x_train_normalized, y_train, x_test_normalized, y_test)
-		l1_regressor.fit()
-		scores[i] = l1_regressor.evaluate()
+		lin_regressor = LinRegression(x_train_normalized, y_train, x_test_normalized, y_test)
+		lin_regressor.fit()
+		scores[i] = lin_regressor.evaluate()
 
 	plt.figure(figsize=(30, 20))
 	plt.plot(list(scores.keys()), list(scores.values()))
 	plt.xlabel("# of LSA columns")
 	plt.ylabel("MSE values")
 	plt.show()
+
+
