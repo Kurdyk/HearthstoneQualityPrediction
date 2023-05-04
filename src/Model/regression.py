@@ -7,11 +7,12 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import normalize
 from src.dataEncoder import *
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class L1Regression:
 
-	def __init__(self, x_train, y_train, x_test, y_test, alpha):
+	def __init__(self, x_train, y_train, x_test, y_test, alpha=0.1):
 		self.x_train = x_train
 		self.y_train = y_train
 		self.x_test = x_test
@@ -31,26 +32,25 @@ class L1Regression:
 
 if __name__ == "__main__":
 	df = pd.read_csv("../../HSTopdeck.csv", index_col=0)
-	df = df[df["card_type"] == "Minion"].drop(columns=["card_type", "durability"])
+	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
-	x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True, random_state=52)
-	data_encoder = DataEncoder()
+	scores = dict()
+	for i in range(20, 100, 5):
+		x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True)
+		data_encoder = DataEncoder()
 
-	x_train_encoded = data_encoder.encode(x_train, 40).fillna(0).drop(columns=["is_Shadow", "is_Nature", "is_Fire", "is_Arcane", "is_Frost", "is_Fel", "is_Holy"])
-	x_test_encoded = data_encoder.encode(x_test, 40).fillna(0).drop(columns=["is_Shadow", "is_Nature", "is_Fire", "is_Arcane", "is_Frost", "is_Fel", "is_Holy"])
+		x_train_encoded = data_encoder.encode(x_train, i).fillna(0)
+		x_test_encoded = data_encoder.encode(x_test, i).fillna(0)
 
-	x_train_normalized = normalize(x_train_encoded)
-	x_test_normalized = normalize(x_test_encoded)
+		x_train_normalized = normalize(x_train_encoded)
+		x_test_normalized = normalize(x_test_encoded)
 
-	# pca = PCA(n_components=10)
-	# x_train_normalized = pca.fit_transform(x_train_normalized)
-	# x_test_normalized = pca.fit_transform(x_test_normalized)
+		l1_regressor = L1Regression(x_train_normalized, y_train, x_test_normalized, y_test)
+		l1_regressor.fit()
+		scores[i] = l1_regressor.evaluate()
 
-	l1_regressor = L1Regression(x_train_normalized, y_train, x_test_normalized, y_test, 0.1)
-	l1_regressor.fit()
-	print(l1_regressor.model.coef_)
-	print(l1_regressor.evaluate())
-	prediction = l1_regressor.pred(x_test_normalized)
-	print(prediction)
-	# for i in range(len(prediction)):
-	# 	print(f"for {x_test_normalized[i]} score predicted: {prediction[i]}, expected {y_test[i]}")
+	plt.figure(figsize=(30, 20))
+	plt.plot(list(scores.keys()), list(scores.values()))
+	plt.xlabel("# of LSA columns")
+	plt.ylabel("MSE values")
+	plt.show()
