@@ -1,5 +1,5 @@
 name:
-Audio-Amplifier
+audio-amplifier
 card_text:
 Battlecry: Set your maximum Mana and hand size to 11.
 card_type:

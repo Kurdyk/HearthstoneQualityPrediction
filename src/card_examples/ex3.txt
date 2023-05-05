@@ -1,5 +1,5 @@
 name:
-Amplified-Elekk
+amplified-elekk
 card_text:
 Taunt Deathrattle: Deal 3 damage to all enemy minions.
 card_type:

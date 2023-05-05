@@ -29,7 +29,6 @@ def plot_data(df, n_dim):
 if __name__ == "__main__":
 	df = pd.read_csv("../HSTopdeck.csv").drop(columns=["card_type", "card_mark"]).set_index("name")
 	de = DataEncoder()
-	resulting_df = de.encode(df, 100).fillna(0)
-	resulting_df.to_csv("test.csv")
+	resulting_df = de.encode(df, 55).fillna(0)
 	n_dim = 3
 	plot_data(resulting_df, n_dim)
