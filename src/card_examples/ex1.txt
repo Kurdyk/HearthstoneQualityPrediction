@@ -1,0 +1,18 @@
+name:
+jitterbug
+card_text:
+Divine Shield After a friendly character loses Divine Shield, draw a card.
+card_type:
+Minion
+minion_type:
+Beast
+class:
+Paladin
+rarity:
+Rare
+mana:
+4
+attack:
+4
+health:
+3

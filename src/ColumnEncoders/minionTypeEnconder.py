@@ -41,11 +41,10 @@ class MinionTypeEncoder:
 		type_encoding_df = pd.DataFrame(columns=["name", "Type_hex0", "Type_hex1", "Type_hex2"]).set_index("name")
 		for index, row in dataframe["minion_type"].items():
 			name, types = index, row
-			if dataframe.isnull().iloc[index]["minion_type"]:
+			if type(types) == float:
 				encoding = {"Type_hex0": 0, "Type_hex1": 0, "Type_hex2": 0}
 			else:
-				type_list = parse_list(types)
-				encoding = encode_type(type_list)
+				encoding = encode_type(parse_list(types))
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=["name", "Type_hex0", "Type_hex1", "Type_hex2"]).set_index("name")

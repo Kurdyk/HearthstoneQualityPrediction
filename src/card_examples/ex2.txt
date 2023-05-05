@@ -1,0 +1,14 @@
+name:
+blackrock-n-roll
+card_text:
+Give all minions in your deck Attack and Health equal to their Cost.
+card_type:
+Spell
+spell_school:
+Fire
+class:
+Warrior
+rarity:
+Legendary
+mana:
+5

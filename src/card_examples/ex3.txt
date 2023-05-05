@@ -1,0 +1,18 @@
+name:
+amplified-elekk
+card_text:
+Taunt Deathrattle: Deal 3 damage to all enemy minions.
+card_type:
+Minion
+minion_type:
+Beast
+class:
+Neutral
+rarity:
+Common
+mana:
+10
+attack:
+6
+health:
+12
