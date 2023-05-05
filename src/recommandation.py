@@ -61,14 +61,14 @@ if __name__ == "__main__":
 			try:
 				card = read_card_file(input("Path to card in a file ?\n"))
 				card_df = pd.DataFrame(card, columns=keys).drop(columns=["card_type", "durability"]).set_index("name")
-				if card["name"] in x_train.index():
-					print(f"This card was present in the training set with a grade of {y_train.loc[y_train.index == card['name']]}")
-					choice_bis = input("Do you want to retrain the model with it ? yes/no\n")
+				if card["name"] in x_train.index:
+					print(f"This card was present in the training set with a grade of {y_train.loc[y_train.index == card['name']][0]}")
+					choice_bis = input("Do you want to retrain the model without it ? yes/no\n")
 					if choice_bis == "yes":
 						df_bis = df.drop(card["name"])
 						x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 						x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True)
-						print("Encoding data to train models")
+						print("Encoding data to train the model")
 						x_train_encoded = data_encoder.encode(x_train, 55).fillna(0)
 						x_test_encoded = data_encoder.encode(x_test, 55).fillna(0)
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 						with_new_card = normalize(data_encoder.encode(encoding_df, 55).fillna(0))
 						new_card_encoded = with_new_card[-1]
 						print("Done")
-						print(f"This card is graded {lin_regressor_bis.pred([new_card_encoded])} by the retrained model")
+						print(f"This card is graded {lin_regressor_bis.pred([new_card_encoded])[0]} by the retrained model")
 
 				else:
 					print("Encoding new card")
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 					with_new_card = normalize(data_encoder.encode(encoding_df, 55).fillna(0))
 					new_card_encoded = with_new_card[-1]
 					print("Done")
-					print(f"This card is graded {lin_regressor.pred([new_card_encoded])} by the model")
+					print(f"This card is graded {lin_regressor.pred([new_card_encoded])[0]} by the model")
 
 			except FileNotFoundError:
 				print("not found")
