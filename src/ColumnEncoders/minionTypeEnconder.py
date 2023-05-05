@@ -48,7 +48,7 @@ class MinionTypeEncoder:
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=["name", "Type_hex0", "Type_hex1", "Type_hex2"]).set_index("name")
-			type_encoding_df = type_encoding_df.append(tmp)
+			type_encoding_df = type_encoding_df._append(tmp)
 
 		tmp = dataframe.join(type_encoding_df, on="name")
 		tmp = tmp.drop(columns="minion_type")
@@ -73,7 +73,7 @@ class MinionTypeEncoder:
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=all_col).set_index("name")
-			type_encoding_df = type_encoding_df.append(tmp)
+			type_encoding_df = type_encoding_df._append(tmp)
 
 		tmp = dataframe.join(type_encoding_df, on="name")
 		tmp = tmp.drop(columns="minion_type")

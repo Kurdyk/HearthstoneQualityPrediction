@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.decomposition import PCA
-from dataEncoder import *
+from src.dataEncoder import *
 import pandas as pd
 
 def plot_data(df, n_dim):

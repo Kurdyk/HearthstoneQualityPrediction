@@ -19,7 +19,7 @@ class SpellSchoolsEncoder:
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=all_col).set_index("name")
-			school_encoding_df = school_encoding_df.append(tmp)
+			school_encoding_df = school_encoding_df._append(tmp)
 
 		tmp = dataframe.join(school_encoding_df, on="name")
 		tmp = tmp.drop(columns="spell_school")
