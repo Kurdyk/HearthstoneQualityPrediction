@@ -78,7 +78,7 @@ evaluation = l1_regressor.evaluate()
 print(evaluation)
 
 # Faire les prédictions sur les données d'entraînement
-y_pred = l1_regressor.pred(pca_x_test_encoded.reshape(1,-1))
+y_pred = l1_regressor.pred(pca_x_test_encoded)
 
 # Tracer les vraies valeurs par rapport aux prédictions
 plt.scatter(y_test, y_pred)

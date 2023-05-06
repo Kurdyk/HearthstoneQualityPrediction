@@ -18,7 +18,7 @@ class DataEncoder:
 		self.spell_school_encoder = spell_school_encoder
 		self.text_encoder = text_encoder
 
-	def encode(self, df: pd.DataFrame, n_dim_text: int = 20):
+	def encode(self, df: pd.DataFrame, n_dim_text: int = 55):
 		class_encoded = self.class_encoder.encode_class_col_one_hot(df)
 		type_encoded = self.minion_type_encoder.encode_type_col_one_hot(class_encoded)
 		rarity_encoded = self.rarity_encoder.encode_rarity_col(type_encoded)
