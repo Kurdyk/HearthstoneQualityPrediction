@@ -19,7 +19,7 @@ class RarityEncoder:
 			encoding = {k: v for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=all_col, index=["name"]).set_index("name")
 			tmp.iloc[0]["is_lengendary"] = 1 if rarity == "Legendary" else 0
-			rarity_encoding_df = rarity_encoding_df.append(tmp)
+			rarity_encoding_df = rarity_encoding_df._append(tmp)
 
 		tmp = dataframe.join(rarity_encoding_df, on="name")
 		tmp = tmp.drop(columns="rarity")

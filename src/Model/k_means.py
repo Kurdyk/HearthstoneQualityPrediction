@@ -1,6 +1,8 @@
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 from sklearn.preprocessing import normalize
+import sys
+sys.path.append('..')  # ajouter le dossier parent au PATH
 from src.dataEncoder import *
 from time import time
 import matplotlib.pyplot as plt

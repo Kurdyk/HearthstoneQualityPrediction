@@ -40,6 +40,7 @@ if __name__ == "__main__":
 	df = pd.read_csv("../HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
+	
 	data_encoder = DataEncoder()
 
 	choice = input("Do you want to grade card (1) or recommand card remplacement (2)?\n")
@@ -80,7 +81,7 @@ if __name__ == "__main__":
 						lin_regressor_bis.fit()
 						print("Done")
 						print("Encoding new card")
-						encoding_df = x_test.append(card_df)
+						encoding_df = x_test._append(card_df)
 						with_new_card = normalize(data_encoder.encode(encoding_df, 55).fillna(0))
 						new_card_encoded = with_new_card[-1]
 						print("Done")
@@ -88,7 +89,7 @@ if __name__ == "__main__":
 
 				else:
 					print("Encoding new card")
-					encoding_df = x_test.append(card_df)
+					encoding_df = x_test._append(card_df)
 					with_new_card = normalize(data_encoder.encode(encoding_df, 55).fillna(0))
 					new_card_encoded = with_new_card[-1]
 					print("Done")
@@ -112,7 +113,7 @@ if __name__ == "__main__":
 					cluster_index = k_means.pred([x_normalized[index]])
 				except ValueError:
 					card_df = pd.DataFrame(card, columns=keys).drop(columns=["card_type", "durability"]).set_index("name")
-					encoding_df = x.append(card_df)
+					encoding_df = x._append(card_df)
 					print("Encoding new card")
 					with_new_card = normalize(data_encoder.encode(encoding_df, 55).fillna(0))
 					print("Done")
@@ -126,7 +127,7 @@ if __name__ == "__main__":
 					classes = [hero_class for hero_class in class_dict if elt["class"].count(hero_class) > 0]
 					for hero_class in classes:
 						if hero_class in card["class"] + ["Neutral"] and elt["mana"] == card["mana"]:
-							compatible = compatible.append(elt)
+							compatible = compatible._append(elt)
 							continue
 				try:
 					n_remplacement = int(input("How many recommandations do you want per card ?\n"))

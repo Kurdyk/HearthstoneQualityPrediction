@@ -56,7 +56,7 @@ class ClassEncoder:
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=["name", "Class_hex0", "Class_hex1", "Class_hex2"]).set_index("name")
-			class_encoding_df = class_encoding_df.append(tmp)
+			class_encoding_df = class_encoding_df._append(tmp)
 
 		tmp = dataframe.join(class_encoding_df, on="name")
 		tmp = tmp.drop(columns="class")
@@ -86,7 +86,7 @@ class ClassEncoder:
 			encoding["name"] = name
 			encoding = {k: [v] for k, v in encoding.items()}
 			tmp = pd.DataFrame(encoding, columns=all_col).set_index("name")
-			class_encoding_df = class_encoding_df.append(tmp)
+			class_encoding_df = class_encoding_df._append(tmp)
 
 		tmp = dataframe.join(class_encoding_df, on="name")
 		tmp = tmp.drop(columns="class")
