@@ -16,25 +16,36 @@ class_dict = {"Druid": 0b1,
 
 class ClassEncoder:
 
-	def encode_class(self, class_list: list):
+	def encode_class(self, class_list: list) -> dict:
+		"""
+		:param class_list: the list of the classes of the card
+		:return: an hexa encoding of this list in a dict
+		"""
 		bit_dict_hexa = {"Class_hex0": 0, "Class_hex1": 0, "Class_hex2": 0}
 		binary = 0b0
 		for card_class in class_list:
 			binary += class_dict[card_class]
 		hexa = hex(binary)
-		if len(hexa) < 5:
+		if len(hexa) < 5:  # fill the blanks
 			value = hexa[2:]
 			hexa = hexa[:2] + "0" * (3 - len(value)) + value
-		for i in range(3):
+		for i in range(3):  # read the hexa encoding
 			try:
 				bit_dict_hexa["Class_hex" + str(i)] = (int('0x' + hexa[2 + i], base=16))
 			except IndexError:
 				pass
 		return bit_dict_hexa
 
-	def encode_class_col(self, dataframe: pd.DataFrame):
-
-		def parse_list(list_as_str: str):
+	def encode_class_col(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+		"""
+		:param dataframe: A dataframe with a class column to encode using the hexa encoding
+		:return: the dataframe with the class column removed and remplaced by its encoding
+		"""
+		def parse_list(list_as_str: str) -> list:
+			"""
+			:param list_as_str: List of classes of a card as a string (since datdframes save them as strings)
+			:return: a python list with the classes
+			"""
 			return [hero_class for hero_class in class_dict if list_as_str.count(hero_class) > 0]
 
 		class_encoding_df = pd.DataFrame(columns=["name", "Class_hex0", "Class_hex1", "Class_hex2"]).set_index("name")
@@ -52,9 +63,16 @@ class ClassEncoder:
 		tmp = tmp.loc[:, ~tmp.columns.str.contains('^Unnamed')]
 		return tmp
 
-	def encode_class_col_one_hot(self, dataframe: pd.DataFrame):
-
-		def parse_list(list_as_str: str):
+	def encode_class_col_one_hot(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+		"""
+		:param dataframe: A dataframe with a class column to encode using the one hot encoding
+		:return: the dataframe with the class column removed and remplaced by its encoding
+		"""
+		def parse_list(list_as_str: str) -> list:
+			"""
+			:param list_as_str: List of classes of a card as a string (since datdframes save them as strings)
+			:return: a python list with the classes
+			"""
 			return [hero_class for hero_class in class_dict if list_as_str.count(hero_class) > 0]
 
 		new_col = [f"is_{class_name}" for class_name in class_dict]

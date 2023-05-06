@@ -100,7 +100,7 @@ if __name__ == "__main__":
 	elif choice == "2":  # card recommandation
 		print("Applying Kmeans and encoding cards")
 		x_normalized = normalize(data_encoder.encode(x, 55).fillna(0))
-		k_means = K_Means(x_normalized, 6)
+		k_means = K_Means(x_normalized, 3)
 		k_means.fit()
 		labels = k_means.model.labels_
 		print("Done")

@@ -8,7 +8,12 @@ keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", 
 		"minion_type", "spell_school"]
 
 
-def parse_card_page(url, card_name):
+def parse_card_page(url, card_name) -> pd.DataFrame:
+	"""
+	:param url: page url of the card
+	:param card_name: the name of the card
+	:return: a dataframe containing the information of the card
+	"""
 	response = requests.get(url)
 	soup = BeautifulSoup(response.text, "html.parser")
 	card_info = soup.find("div", {"class": "col-md-14"})
@@ -70,7 +75,7 @@ def main():
 	total_df = pd.DataFrame(columns=keys)
 
 	for i in range(1, 86):
-		print(i)
+		print(f"Page number {i}/85")
 		response = requests.get(base_url + str(i))
 		soup = BeautifulSoup(response.text, "html.parser")
 		cards = soup.findAll("div", class_="col-md-6 col-sm-12 col-xs-24")
@@ -81,7 +86,7 @@ def main():
 			total_df = total_df._append(card_df)
 
 	print(total_df)
-	total_df.to_csv("../HSTopdeck.csv",index=False)
+	total_df.to_csv("../HSTopdeck.csv", index=False)
 
 
 if __name__ == "__main__":

@@ -18,9 +18,13 @@ class DataEncoder:
 		self.spell_school_encoder = spell_school_encoder
 		self.text_encoder = text_encoder
 
-	def encode(self, df: pd.DataFrame, n_dim_text: int = 20):
-		class_encoded = self.class_encoder.encode_class_col_one_hot(df)
-		type_encoded = self.minion_type_encoder.encode_type_col_one_hot(class_encoded)
+	def encode(self, df: pd.DataFrame, n_dim_text: int = 20, hexa=False):
+		if hexa:
+			class_encoded = self.class_encoder.encode_class_col(df)
+			type_encoded = self.minion_type_encoder.encode_type_col(class_encoded)
+		else:
+			class_encoded = self.class_encoder.encode_class_col_one_hot(df)
+			type_encoded = self.minion_type_encoder.encode_type_col_one_hot(class_encoded)
 		rarity_encoded = self.rarity_encoder.encode_rarity_col(type_encoded)
 		spell_school_encoded = self.spell_school_encoder.encode_spell_school_col(rarity_encoded)
 
