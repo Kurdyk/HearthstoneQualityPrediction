@@ -11,7 +11,6 @@ df['card_text'] = df['card_text'].str.replace('"', '')
 df['card_text'] = df['card_text'].str.replace(',', ' ')
 df['card_text'] = df['card_text'].str.replace(':', ' : ')
 df['card_text'] = df['card_text'].str.replace('.', ' ')
-df.to_csv("clean_df.csv",index=False)
 
 # Séparation train/test
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True)
@@ -29,6 +28,7 @@ x_train_normalized = normalize(x_train_encoded)
 x_test_normalized = normalize(x_test_encoded)
 """
 
+
 scaler = MinMaxScaler()
 cols_to_scale = ['mana', 'attack', 'health']
 x_train_encoded[cols_to_scale] = scaler.fit_transform(x_train_encoded[cols_to_scale])
@@ -39,9 +39,11 @@ x_test_encoded[cols_to_scale] = scaler.fit_transform(x_test_encoded[cols_to_scal
 plot_data(x_train_normalized,3)
 
 # Création et entraînement du modèle
+"""
 lin_regressor = LinRegression(x_train_encoded, y_train, x_test_encoded, y_test)
 lin_regressor.fit()
 
 # Évaluation du modèle
 mse_score = lin_regressor.evaluate()
 print(mse_score)
+"""
