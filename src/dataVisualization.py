@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import normalize
 from dataEncoder import *
 import pandas as pd
 
@@ -31,7 +32,7 @@ def plot_grades(grades) -> None:
 	:param grades: a pandas Series containing the grades of the cards
 	:return: plot the repartition of the grades
 	"""
-	n, bins, patches = plt.hist(grades, bins=10, density=False, cumulative=False)
+	n, bins, patches = plt.hist(grades, bins=40, density=False, cumulative=False)
 
 	plt.title('Repartition of grades')
 	plt.xlabel('Grades')
@@ -47,6 +48,6 @@ if __name__ == "__main__":
 	# Plotting points in space
 	df = pd.read_csv("../HSTopdeck.csv").drop(columns=["card_type", "durability", "card_mark"]).set_index("name")
 	de = DataEncoder()
-	resulting_df = de.encode(df, 55).fillna(0)
+	resulting_df = normalize(de.encode(df, 55).fillna(0))
 	n_dim = 2
 	plot_data(resulting_df, n_dim)
