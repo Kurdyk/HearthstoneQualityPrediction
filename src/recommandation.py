@@ -100,7 +100,7 @@ if __name__ == "__main__":
 	elif choice == "2":  # card recommandation
 		print("Applying Kmeans and encoding cards")
 		x_normalized = normalize(data_encoder.encode(x, 55).fillna(0))
-		k_means = K_Means(x_normalized, 3)
+		k_means = K_Means(x_normalized, 6)
 		k_means.fit()
 		labels = k_means.model.labels_
 		print("Done")
@@ -128,9 +128,15 @@ if __name__ == "__main__":
 						if hero_class in card["class"] + ["Neutral"] and elt["mana"] == card["mana"]:
 							compatible = compatible.append(elt)
 							continue
-				best_match = compatible.nlargest(2, "card_mark")
+				try:
+					n_remplacement = int(input("How many recommandations do you want per card ?\n"))
+				except ValueError:
+					print("Please give a valid number")
+					continue
+				best_match = compatible.nlargest(n_remplacement, "card_mark")
 				for index, card_suggestion in best_match.iterrows():
-					print(f"You can replace this card with {index} graded {card_suggestion['card_mark']}")
+					print(f"You can replace this card with {index} graded {card_suggestion['card_mark']}, you can see it"
+						  f"at : https://www.hearthstonetopdecks.com/cards/{index}/")
 
 			except FileNotFoundError:
 				print("not found")
