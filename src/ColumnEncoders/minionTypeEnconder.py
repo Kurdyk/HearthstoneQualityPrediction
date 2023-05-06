@@ -17,12 +17,23 @@ type_dict = {"Amalgam": 0b1,
 
 class MinionTypeEncoder:
 
-	def encode_type_col(self, dataframe: pd.DataFrame):
-
-		def parse_list(list_as_str: str):
+	def encode_type_col(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+		"""
+		:param dataframe: A dataframe with a minion_type column to encode using the hexa encoding
+		:return: the dataframe with the minion_type column removed and remplace by its encoding
+		"""
+		def parse_list(list_as_str: str) -> list:
+			"""
+			:param list_as_str: List of minion_types of a card as a string (since datdframes save them as strings)
+			:return: a python list with the minion_types
+			"""
 			return [minion_type for minion_type in type_dict if list_as_str.count(minion_type) > 0]
 
 		def encode_type(type_list: list):
+			"""
+			:param type_list: the list of the types of the card
+			:return: an hexa encoding of this list in a dict
+			"""
 			bit_dict_hexa = {"Type_hex0": 0, "Type_hex1": 0, "Type_hex2": 0}
 			binary = 0b0
 			for card_type in type_list:
@@ -56,8 +67,15 @@ class MinionTypeEncoder:
 		return tmp
 
 	def encode_type_col_one_hot(self, dataframe: pd.DataFrame):
-
-		def parse_list(list_as_str: str):
+		"""
+		:param dataframe: A dataframe with a class column to encode using the one hot encoding
+		:return: the dataframe with the class column removed and remplaced by its encoding
+		"""
+		def parse_list(list_as_str: str) -> list:
+			"""
+			:param list_as_str: List of minion_types of a card as a string (since datdframes save them as strings)
+			:return: a python list with the minion_types
+			"""
 			return [minion_type for minion_type in type_dict if list_as_str.count(minion_type) > 0]
 
 		new_col = [f"is_{type_name}" for type_name in type_dict]
@@ -66,7 +84,7 @@ class MinionTypeEncoder:
 
 		for index, row in dataframe["minion_type"].items():
 			name, types = index, row
-			if type(types) == float:
+			if type(types) == float:  # nan -> card without a minion_type
 				encoding = {f"is_{minion_type}": 0 for minion_type in type_dict}
 			else:
 				encoding = {f"is_{minion_type}": 1 if minion_type in types else 0 for minion_type in type_dict}
@@ -82,6 +100,6 @@ class MinionTypeEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("test_class.csv")
+	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = MinionTypeEncoder()
 	ce.encode_type_col_one_hot(df).to_csv("test_type.csv")

@@ -6,8 +6,11 @@ schools = {"Arcane", "Fel", "Fire", "Frost", "Holy", "Nature", "Shadow"}
 
 class SpellSchoolsEncoder:
 
-	def encode_spell_school_col(self, dataframe: pd.DataFrame):
-
+	def encode_spell_school_col(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+		"""
+		:param dataframe: A dataframe with a rarity column to encode using a one hot encoding
+		:return: The dataframe with the rarity column removed and remplaced by its encodings
+		"""
 		all_col = ["name"] + [f"is_{school}" for school in schools]
 		school_encoding_df = pd.DataFrame(columns=all_col).set_index("name")
 		for index, row in dataframe["spell_school"].items():
@@ -28,6 +31,6 @@ class SpellSchoolsEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("test_rarity.csv")
+	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = SpellSchoolsEncoder()
 	ce.encode_spell_school_col(df).to_csv("test_school.csv")

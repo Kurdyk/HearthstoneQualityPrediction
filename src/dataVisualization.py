@@ -27,8 +27,12 @@ def plot_data(df, n_dim):
 		print("Dimension not supported for plotting")
 
 
-def plot_grades(grade_df):
-	n, bins, patches = plt.hist(grade_df, bins=10, density=False, cumulative=False)
+def plot_grades(grades) -> None:
+	"""
+	:param grades: a pandas Series containing the grades of the cards
+	:return: plot the repartition of the grades
+	"""
+	n, bins, patches = plt.hist(grades, bins=10, density=False, cumulative=False)
 
 	plt.title('Repartition of grades')
 	plt.xlabel('Grades')

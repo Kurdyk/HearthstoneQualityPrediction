@@ -5,7 +5,11 @@ rarities = {"Common", "Rare", "Epic", "Legendary"}
 
 class RarityEncoder:
 
-	def encode_rarity_col(self, dataframe: pd.DataFrame):
+	def encode_rarity_col(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+		"""
+		:param dataframe: A dataframe with a rarity column to encode
+		:return: The dataframe with the rarity column removed and remplaced by its encoding, 1 for legendary, 0 for others
+		"""
 		all_col = ["name", "is_lengendary"]
 
 		rarity_encoding_df = pd.DataFrame(columns=all_col).set_index("name")
@@ -24,6 +28,6 @@ class RarityEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("test_type.csv")
+	df = pd.read_csv("../../HSTopdeck.csv")
 	ce = RarityEncoder()
 	ce.encode_rarity_col(df).to_csv("test_rarity.csv")

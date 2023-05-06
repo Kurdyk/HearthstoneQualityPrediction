@@ -2,6 +2,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 from sklearn.preprocessing import normalize
 from src.dataEncoder import *
+from time import time
 import matplotlib.pyplot as plt
 
 
@@ -23,20 +24,20 @@ class K_Means:
 
 
 if __name__ == "__main__":
+	# read CSV
 	df = pd.read_csv("../../HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 	data_encoder = DataEncoder()
-
+	# encode and normalize data
 	x_encoded = data_encoder.encode(x, 55).fillna(0)
 	x_normalized = normalize(x_encoded)
 
+	# Cross validating the number of clusters
 	sse, slc = dict(), dict()
+	random_seed = time()  # set to a fixed value if you want to reproduce
 	for k in range(2, 20):
-		# seed of 10 for reproducibility.
-		kmeans = KMeans(n_clusters=k, max_iter=1000, random_state=10).fit(x_normalized)
-		if k == 3:
-			labels = kmeans.labels_
+		kmeans = KMeans(n_clusters=k, max_iter=1000, n_init=10, random_state=random_seed).fit(x_normalized)
 		clusters = kmeans.labels_
 		sse[k] = kmeans.inertia_  # Inertia: Sum of distances of samples to their closest cluster center
 		slc[k] = silhouette_score(x_normalized, clusters)
