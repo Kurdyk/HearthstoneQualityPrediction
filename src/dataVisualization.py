@@ -14,17 +14,16 @@ def plot_data(df, n_dim):
 
 	if n_dim == 1:
 		plt.plot(X_pca)
-		plt.show()
 	elif n_dim == 2:
 		plt.scatter(X_pca[:,0], X_pca[:,1])
-		plt.show()
 	elif n_dim == 3:
 		fig = plt.figure()
 		ax = fig.add_subplot(111, projection='3d')
 		ax.scatter(X_pca[:,0], X_pca[:,1], X_pca[:,2])
-		plt.show()
 	else:
 		print("Dimension not supported for plotting")
+	plt.title(f"Cards in {n_dim} dimension after the encoding and a PCA")
+	plt.show()
 
 
 def plot_grades(grades) -> None:
@@ -36,7 +35,7 @@ def plot_grades(grades) -> None:
 
 	plt.title('Repartition of grades')
 	plt.xlabel('Grades')
-	plt.ylabel('Number of card')
+	plt.ylabel('Number of cards')
 
 	plt.show()
 
@@ -49,5 +48,5 @@ if __name__ == "__main__":
 	df = pd.read_csv("../HSTopdeck.csv").drop(columns=["card_type", "durability", "card_mark"]).set_index("name")
 	de = DataEncoder()
 	resulting_df = de.encode(df, 55).fillna(0)
-	n_dim = 3
+	n_dim = 2
 	plot_data(resulting_df, n_dim)
