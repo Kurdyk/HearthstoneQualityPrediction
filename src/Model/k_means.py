@@ -1,6 +1,6 @@
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, davies_bouldin_score
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, MinMaxScaler
 import sys
 sys.path.append('..')  # ajouter le dossier parent au PATH
 from src.dataEncoder import *
@@ -33,16 +33,18 @@ if __name__ == "__main__":
 	data_encoder = DataEncoder()
 	# encode and normalize data
 	x_encoded = data_encoder.encode(x, 55).fillna(0)
-	x_normalized = normalize(x_encoded)
+	scaler = MinMaxScaler()
+	cols_to_scale = ['mana', 'attack', 'health']
+	x_encoded[cols_to_scale] = scaler.fit_transform(x_encoded[cols_to_scale])
 
 	# Cross validating the number of clusters
 	sse, slc = dict(), dict()
-	random_seed = time()  # set to a fixed value if you want to reproduce
-	for k in range(2, 20):
-		kmeans = KMeans(n_clusters=k, max_iter=1000, n_init=10, random_state=random_seed).fit(x_normalized)
+	random_seed = 42  # set to a fixed value if you want to reproduce
+	for k in range(2, 50):
+		kmeans = KMeans(n_clusters=k, max_iter=1000, n_init=10, random_state=random_seed).fit(x_encoded)
 		clusters = kmeans.labels_
 		sse[k] = kmeans.inertia_  # Inertia: Sum of distances of samples to their closest cluster center
-		slc[k] = silhouette_score(x_normalized, clusters)
+		slc[k] = silhouette_score(x_encoded, clusters)
 
 	plt.figure(figsize=(15, 10))
 	plt.plot(list(sse.keys()), list(sse.values()))
