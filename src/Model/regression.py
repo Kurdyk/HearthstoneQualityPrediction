@@ -1,10 +1,7 @@
-from sklearn.decomposition import PCA
-from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import normalize,MinMaxScaler
+from sklearn.preprocessing import normalize
 import sys
 sys.path.append('..')  # ajouter le dossier parent au PATH
 from src.dataEncoder import *
@@ -33,7 +30,7 @@ class LinRegression:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../../HSTopdeck.csv", index_col=0)
+	df = pd.read_csv("HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 	scores = dict()

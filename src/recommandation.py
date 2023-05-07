@@ -1,9 +1,9 @@
 import pandas as pd
 
-from Model.k_means import *
-from Model.regression import *
+from src.Model.k_means import *
+from src.Model.regression import *
 from numpy import nan
-from ColumnEncoders.classEncoder import class_dict
+from src.ColumnEncoders.classEncoder import class_dict
 
 keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "rarity",
 		"minion_type", "spell_school"]
@@ -37,7 +37,7 @@ def read_card_file(path: str) -> dict:
 
 if __name__ == "__main__":
 	# Preparating models
-	df = pd.read_csv("../HSTopdeck.csv", index_col=0)
+	df = pd.read_csv("HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 

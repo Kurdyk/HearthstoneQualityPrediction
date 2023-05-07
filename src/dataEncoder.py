@@ -43,7 +43,7 @@ class DataEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../HSTopdeck.csv", index_col=0)
+	df = pd.read_csv("HSTopdeck.csv", index_col=0)
 	data_encoder = DataEncoder(ClassEncoder(), MinionTypeEncoder(), RarityEncoder(),
 							   SpellSchoolsEncoder(), TextEncoder())
 

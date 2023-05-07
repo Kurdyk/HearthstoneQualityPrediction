@@ -1,10 +1,11 @@
 from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score, davies_bouldin_score
-from sklearn.preprocessing import normalize, MinMaxScaler
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import MinMaxScaler
 import sys
-sys.path.append('..')  # ajouter le dossier parent au PATH
+
 from src.dataEncoder import *
-from time import time
+
+sys.path.append('..')  # ajouter le dossier parent au PATH
 import matplotlib.pyplot as plt
 
 
@@ -27,7 +28,7 @@ class K_Means:
 
 if __name__ == "__main__":
 	# read CSV
-	df = pd.read_csv("../../HSTopdeck.csv", index_col=0)
+	df = pd.read_csv("HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 	data_encoder = DataEncoder()

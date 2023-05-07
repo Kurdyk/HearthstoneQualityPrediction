@@ -1,4 +1,5 @@
-from Model.regression import *
+from sklearn.preprocessing import MinMaxScaler
+from src.Model.regression import *
 from sklearn.model_selection import KFold
 import random
 
@@ -17,7 +18,7 @@ best_pca_dim = -1
 n_folds = 5
 
 # Récupération et nettoyage du csv
-df = pd.read_csv("../HSTopdeck.csv", index_col=0)
+df = pd.read_csv("HSTopdeck.csv", index_col=0)
 df = df.drop(columns=["card_type", "durability"])
 x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 

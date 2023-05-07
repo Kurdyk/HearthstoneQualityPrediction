@@ -1,0 +1,12 @@
+name:
+a-good-draw
+card_text:
+Draw card until you have as many cards in hand as your oppenent.
+card_type:
+Spell
+class:
+Neutral
+rarity:
+Lengendary
+mana:
+4
