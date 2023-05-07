@@ -40,12 +40,6 @@ if __name__ == "__main__":
 	df = pd.read_csv("../HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
-	df = df.replace('\xa0', '', regex=True)
-	df['card_text'] = df['card_text'].str.replace('\n', '')
-	df['card_text'] = df['card_text'].str.replace('"', '')
-	df['card_text'] = df['card_text'].str.replace(',', ' ')
-	df['card_text'] = df['card_text'].str.replace(':', ' : ')
-	df['card_text'] = df['card_text'].str.replace('.', ' ')
 
 	data_encoder = DataEncoder()
 
