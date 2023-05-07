@@ -113,7 +113,7 @@ if __name__ == "__main__":
 				card = read_card_file(input("Path to card in a file ?\n"))
 				try:
 					index = list(x.index).index(card["name"])
-					cluster_index = k_means.pred([x_encoded[index]])
+					cluster_index = k_means.pred([x_encoded.iloc[index]])
 				except ValueError:
 					card_df = pd.DataFrame(card, columns=keys).drop(columns=["card_type", "durability"]).set_index("name")
 					encoding_df = x._append(card_df)
