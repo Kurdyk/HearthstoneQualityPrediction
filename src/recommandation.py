@@ -4,6 +4,8 @@ from src.Model.k_means import *
 from src.Model.regression import *
 from numpy import nan
 from src.ColumnEncoders.classEncoder import class_dict
+from sklearn.decomposition import PCA
+
 
 keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "rarity",
 		"minion_type", "spell_school"]
@@ -100,12 +102,14 @@ if __name__ == "__main__":
 				print("not found")
 
 	elif choice == "2":  # card recommandation
+		pca = PCA(6)
 		print("Applying Kmeans and encoding cards")
-		x_encoded = data_encoder.encode(x, 55).fillna(0)
+		x_encoded = data_encoder.encode(x, 14).fillna(0)
 		scaler = MinMaxScaler()
 		cols_to_scale = ['mana', 'attack', 'health']
 		x_encoded[cols_to_scale] = scaler.fit_transform(x_encoded[cols_to_scale])
-		k_means = K_Means(x_encoded, 10)
+		x_train = pca.fit_transform(x_encoded)
+		k_means = K_Means(x_train, 10)
 		k_means.fit()
 		labels = k_means.model.labels_
 		print("Done")
@@ -114,14 +118,15 @@ if __name__ == "__main__":
 				card = read_card_file(input("Path to card in a file ?\n"))
 				try:
 					index = list(x.index).index(card["name"])
-					cluster_index = k_means.pred([x_encoded.iloc[index]])
+					cluster_index = k_means.pred([x_train[index]])
 				except ValueError:
 					card_df = pd.DataFrame(card, columns=keys).drop(columns=["card_type", "durability"]).set_index("name")
 					encoding_df = x._append(card_df)
 					print("Encoding new card")
-					with_new_card = normalize(data_encoder.encode(encoding_df, 55).fillna(0))
+					with_new_card = data_encoder.encode(encoding_df, 14).fillna(0)
+					with_new_card[cols_to_scale] = scaler.fit_transform(with_new_card[cols_to_scale])
 					print("Done")
-					new_card_encoded = with_new_card[-1]
+					new_card_encoded = pca.fit_transform(with_new_card)[-1]
 					cluster_index = k_means.pred([new_card_encoded])
 
 				cluster = df[labels == cluster_index]
