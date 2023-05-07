@@ -8,6 +8,7 @@ import pandas as pd
 
 def plot_data(df, n_dim):
 	"""
+	:n_dim : dimension for the PCA
 	Warning : df must not contain the labels.
 	"""
 	pca = PCA(n_components=n_dim)
@@ -23,7 +24,7 @@ def plot_data(df, n_dim):
 		ax.scatter(X_pca[:,0], X_pca[:,1], X_pca[:,2])
 	else:
 		print("Dimension not supported for plotting")
-	plt.title(f"Cards in {n_dim} dimension after the encoding and a PCA")
+	plt.title(f"Cards in {n_dim} dimension after the encoding, scaling and a PCA")
 	plt.show()
 
 
