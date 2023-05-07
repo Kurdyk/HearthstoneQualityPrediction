@@ -10,8 +10,8 @@ The project folders is organized as follows:
 ## Executing the project
 First be sure that you meet the requirements of the requirements.txt file with for example: `conda create --name <env_name> --file requirements.txt`
 Then, if you want:
-- to run the cross validation on the linear regression : `python3 -m src.Models.regression` (takes some time)
-- to run the cross validation on Kmeans : `python3 -m src.Models.k_means`
+- to run the cross validation on the linear regression : `python3 -m src.Model.regression` (takes some time)
+- to run the cross validation on Kmeans : `python3 -m src.Model.k_means`
 - to run the grid search that tunes the hyperparameters for a regression with a PCA : `python3 -m src.hyperparameters_tuning`
 - to run our recommandatation and grading script : `python3 -m src.recommandation`
 - to create you up-to-date dataset : `python3 -m src.webScraperHSTopDecks`

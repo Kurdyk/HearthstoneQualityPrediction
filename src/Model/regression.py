@@ -30,7 +30,7 @@ class LinRegression:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../../HSTopdeck.csv", index_col=0)
+	df = pd.read_csv("HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 	scores = dict()

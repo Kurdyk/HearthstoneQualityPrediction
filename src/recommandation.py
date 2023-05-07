@@ -1,9 +1,9 @@
 import pandas as pd
 
-from Model.k_means import *
-from Model.regression import *
+from src.Model.k_means import *
+from src.Model.regression import *
 from numpy import nan
-from ColumnEncoders.classEncoder import class_dict
+from src.ColumnEncoders.classEncoder import class_dict
 
 keys = ["name", "mana", "card_text", "attack", "health", "durability", "class", "card_type", "rarity",
 		"minion_type", "spell_school"]

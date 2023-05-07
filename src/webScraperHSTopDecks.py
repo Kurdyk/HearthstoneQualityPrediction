@@ -67,7 +67,7 @@ def parse_card_page(url, card_name) -> pd.DataFrame:
 	mark = rating_text[rating_index_start + len("<strong>"):rating_index_end]
 	card_dict["card_mark"] = float(mark)
 	card_df = pd.DataFrame(columns=keys)
-	card_df = card_df.append(card_dict, ignore_index=True)
+	card_df = card_df._append(card_dict, ignore_index=True)
 	return card_df
 
 

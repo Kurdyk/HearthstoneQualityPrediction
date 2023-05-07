@@ -1,5 +1,5 @@
 from sklearn.preprocessing import MinMaxScaler
-from Model.regression import *
+from src.Model.regression import *
 from sklearn.model_selection import KFold
 import random
 
