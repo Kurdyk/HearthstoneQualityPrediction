@@ -22,7 +22,8 @@ def read_card_file(path: str) -> dict:
 	in_file.close()
 	for index in range(0, len(lines), 2):
 		line = lines[index]
-		next_line = lines[index + 1]
+		if len(line) > 0:
+			next_line = lines[index + 1]
 		for key in keys:
 			if line.count(key) > 0:
 				if key in {"minion_type", "class"}:
