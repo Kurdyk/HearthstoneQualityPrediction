@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 class LinRegression:
 
-	def __init__(self, x_train, y_train, x_test, y_test, alpha=0.1):
+	def __init__(self, x_train, y_train, x_test, y_test):
 		self.x_train = x_train
 		self.y_train = y_train
 		self.x_test = x_test

@@ -1,75 +1,83 @@
 from Model.regression import *
+from sklearn.model_selection import KFold
+import random
+
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
 
 """
-We're using a gridsearch on lsa and pca dim to find the best combination.
+We're using a gridsearch on lsa and pca dim to find the best combination. We've to implement it ourselves because sklearn didn't provide the exact thing 
+we want.
+(We could also have used the variance explained but the grid search allows to test the effect of the combined LSA and PCA)
 """
 
-best_mse = 100000000
+best_avg_mse = 100000000
 best_lsa_dim = -1
 best_pca_dim = -1
+n_folds = 5
 
 # Récupération et nettoyage du csv
 df = pd.read_csv("../HSTopdeck.csv", index_col=0)
 df = df.drop(columns=["card_type", "durability"])
 x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
-df = df.replace('\xa0', '', regex=True)
-df['card_text'] = df['card_text'].str.replace('\n', '')
-df['card_text'] = df['card_text'].str.replace('"', '')
-df['card_text'] = df['card_text'].str.replace(',', ' ')
-df['card_text'] = df['card_text'].str.replace(':', ' : ')
-df['card_text'] = df['card_text'].str.replace('.', ' ')
 
 # Séparation train/test
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, shuffle=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.80, shuffle=True)
 
 # Encodage des données
 data_encoder = DataEncoder()
 scaler = MinMaxScaler()
 cols_to_scale = ['mana', 'attack', 'health']
 
-for lsa_dim in range(1,5):
-	for pca_dim in range(1,5):
+# Gridsearch
+for lsa_dim in range(1,100):
+	rand = random.uniform(0,1)
+	if rand <= 0.2: # To speed up gridsearch
+		continue
+	for pca_dim in range(1,35 + lsa_dim): # 35 + lsa_dim = number of cols of the dataset
+		rand = random.uniform(0,1)
+		if rand <= 0.5: # To speed up gridsearch
+			continue
 
-		x_train_encoded = data_encoder.encode(x_train, lsa_dim).fillna(0)
-		x_test_encoded = data_encoder.encode(x_test, lsa_dim).fillna(0)
+		print("---------------")
+		print("lsa_dim : ",lsa_dim,", pca_dim : ",pca_dim)
+		print("---------------")
 
-		for i in range(0,2):
-			if i == 0:
-				# Normalisation des données
-				x_train_normalized = normalize(x_train_encoded)
-				x_test_normalized = normalize(x_test_encoded)
+		x_train_encoded = data_encoder.encode(df = x_train,n_dim_text = lsa_dim).fillna(0)
+		x_test_encoded = data_encoder.encode(df = x_test,n_dim_text = lsa_dim).fillna(0)
 
-				# PCA
-				
+		# Cross-validation
+		kf = KFold(n_splits=n_folds)
 
-				# Création et entraînement du modèle
-				lin_regressor = LinRegression(x_train_normalized, y_train, x_test_normalized, y_test)
-				lin_regressor.fit()
+		avg_mse = 0
+		for train_index, test_index in kf.split(x_train_encoded):
 
+			x_train_cv, x_test_cv = x_train_encoded.iloc[train_index], x_train_encoded.iloc[test_index]
+			y_train_cv, y_test_cv = y_train.iloc[train_index], y_train.iloc[test_index]
 
-			if i == 1:
-				# Scaling des données
-				x_train_encoded[cols_to_scale] = scaler.fit_transform(x_train_encoded[cols_to_scale])
-				x_test_encoded[cols_to_scale] = scaler.fit_transform(x_test_encoded[cols_to_scale])	
+			# We scaled and use PCA in the cross-validation to avoid dataleak
+			x_train_cv[cols_to_scale] = scaler.fit_transform(x_train_cv[cols_to_scale])
+			x_test_cv[cols_to_scale] = scaler.fit_transform(x_test_cv[cols_to_scale])
 
-				# PCA
+			pca = PCA(n_components=pca_dim)
+			x_train_cv = pca.fit_transform(x_train_cv)
+			x_test_cv = pca.fit_transform(x_test_cv)
 
+			model = LinRegression(x_train_cv,y_train_cv,x_test_cv,y_test_cv)
+			model.fit()
 
-				# Création et entraînement du modèle
-				lin_regressor = LinRegression(x_train_encoded, y_train, x_test_encoded, y_test)
-				lin_regressor.fit()
+			avg_mse += model.evaluate()
 
-			# Évaluation du modèle
-			mse_score = lin_regressor.evaluate()
-			if mse_score < best_mse:
-				best_mse = mse_score
-				best_lsa_dim = lsa_dim
-				best_pca_dim = pca_dim
+		avg_mse = avg_mse/n_folds
 
-				print("---------------")
-				print("best_mse : ",best_mse)
-				print("best_lsa_dim : ",best_lsa_dim)
-				print("best_pca_dim : ",best_pca_dim)
-				print("normalized(0)/scaled(1) : ",i)
-				print("---------------")
+		if avg_mse < best_avg_mse:
+			best_avg_mse = avg_mse
+			best_lsa_dim = lsa_dim
+			best_pca_dim = pca_dim
+
+			print("---------------")
+			print("best_avg_mse : ",best_avg_mse)
+			print("best_lsa_dim : ",best_lsa_dim)
+			print("best_pca_dim : ",best_pca_dim)
+			print("---------------")
 
