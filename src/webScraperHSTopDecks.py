@@ -86,7 +86,7 @@ def main():
 			total_df = total_df._append(card_df)
 
 	print(total_df)
-	total_df.to_csv("../HSTopdeck.csv", index=False)
+	total_df.to_csv("HSTopdeck.csv", index=False)
 
 
 if __name__ == "__main__":

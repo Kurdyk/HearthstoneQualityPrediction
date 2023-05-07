@@ -37,7 +37,7 @@ def read_card_file(path: str) -> dict:
 
 if __name__ == "__main__":
 	# Preparating models
-	df = pd.read_csv("../HSTopdeck.csv", index_col=0)
+	df = pd.read_csv("HSTopdeck.csv", index_col=0)
 	df = df.drop(columns=["card_type", "durability"])
 	x, y = df.loc[:, ~df.columns.str.contains("card_mark")], df["card_mark"]
 

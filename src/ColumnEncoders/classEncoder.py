@@ -95,7 +95,7 @@ class ClassEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../../HSTopdeck.csv")
+	df = pd.read_csv("HSTopdeck.csv")
 	ce = ClassEncoder()
 	ce.encode_class_col_one_hot(df).to_csv("test_class.csv")
 

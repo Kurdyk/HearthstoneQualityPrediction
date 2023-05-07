@@ -31,6 +31,6 @@ class SpellSchoolsEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../../HSTopdeck.csv")
+	df = pd.read_csv("HSTopdeck.csv")
 	ce = SpellSchoolsEncoder()
 	ce.encode_spell_school_col(df).to_csv("test_school.csv")

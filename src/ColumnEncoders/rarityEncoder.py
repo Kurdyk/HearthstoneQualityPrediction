@@ -28,6 +28,6 @@ class RarityEncoder:
 
 
 if __name__ == "__main__":
-	df = pd.read_csv("../../HSTopdeck.csv")
+	df = pd.read_csv("HSTopdeck.csv")
 	ce = RarityEncoder()
 	ce.encode_rarity_col(df).to_csv("test_rarity.csv")

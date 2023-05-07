@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import normalize
-from dataEncoder import *
+from src.dataEncoder import *
 import pandas as pd
 
 
@@ -44,11 +43,11 @@ def plot_grades(grades) -> None:
 
 if __name__ == "__main__":
 	# Plotting label distribution
-	df = pd.read_csv("../HSTopdeck.csv")["card_mark"]
+	df = pd.read_csv("HSTopdeck.csv")["card_mark"]
 	plot_grades(df)
 	# Plotting points in space
-	df = pd.read_csv("../HSTopdeck.csv").drop(columns=["card_type", "durability", "card_mark"]).set_index("name")
+	df = pd.read_csv("HSTopdeck.csv").drop(columns=["card_type", "durability", "card_mark"]).set_index("name")
 	de = DataEncoder()
 	resulting_df = normalize(de.encode(df, 55).fillna(0))
-	n_dim = 2
+	n_dim = int(input("Dimension for PCA? 2/3\n"))
 	plot_data(resulting_df, n_dim)
